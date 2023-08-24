@@ -5,13 +5,12 @@ import {
   StyleSheet,
   Text,
   View,
-
   Button,
   ScrollView,
   Alert
 } from 'react-native';
 import { CarrinhoContext } from '../../contexts/carrinhoProvider/context';
-import { loadMovies } from '../../contexts/carrinhoProvider/actions';
+import { addProduto } from '../../contexts/carrinhoProvider/actions';
 
 import { PropsCarrinho } from '../../contexts/carrinhoProvider/interfaces';
 import { RootStackParamList, StackNavigation } from '../../App';
@@ -26,13 +25,15 @@ function Produto(): JSX.Element {
   const { params } = useRoute<ProfileScreenRouteProp>();
 
   const navigation = useNavigation<StackNavigation>()
+  const { carrinho, dispatch } = useContext(CarrinhoContext)
 
   const [quantidadeProduto, setQuantidadeProduto] = useState(0)
   const [objectCarrinho, setObjectCarrinho] = useState({
     title: "",
     image: "",
     quantidade: `${quantidadeProduto}`,
-    price: ''
+    price: 0, 
+    id:''
   })
 
   useEffect(() => {
@@ -41,18 +42,31 @@ function Produto(): JSX.Element {
         title: params.title,
         image: params.image,
         quantidade: `${quantidadeProduto}`,
-        price: params.price
+        price: params?.price * quantidadeProduto,
+        id: params.id
       })
     }
+
   }, [params, quantidadeProduto])
-  const { carrinho, dispatch } = useContext(CarrinhoContext)
-
-
- 
 
 
   const handleAddCarrinho = (item: PropsCarrinho) => {
-    if(carrinho.filter((objeto)=> objeto.title === params?.title).length>0){
+    if (quantidadeProduto === 0) {
+      Alert.alert(
+        "Alerta",
+        "Adicione uma quantidade de produto",
+        [
+          {
+            text: "Cancelar",
+            style: "cancel"
+          },
+
+        ]
+      );
+      return
+    }
+
+    if (carrinho.filter((objeto) => objeto.title === params?.title).length > 0) {
       Alert.alert(
         "Alerta",
         "Produto já adicionado?",
@@ -61,95 +75,96 @@ function Produto(): JSX.Element {
             text: "Cancelar",
             style: "cancel"
           },
-          
+
         ]
       );
       return
     }
     if (!!dispatch) {
-      loadMovies(dispatch, {
+      addProduto(dispatch, {
         title: item.title,
         image: item.image,
         quantidade: `${quantidadeProduto}`,
         price: item.price,
+        id: item.id,
       })
     }
-     navigation.navigate('Carrinho')
+    navigation.navigate('Carrinho')
   }
+
 
 
   return (
     <ScrollView>
-    <View style={styles.Container}>
-      <View style={styles.ProdutoContainer}>
-        <Image source={{ uri: params?.image }} style={styles.ProdutoImage}></Image>
-        <Text style={styles.TitleProduto}>{params?.title}</Text>
-        <Text>{params?.description}</Text>
-        <View style={styles.ButtonContainer}>
-          <Button title='<' onPress={() => setQuantidadeProduto((value) => value - 1)}></Button>
-          <Text>{quantidadeProduto}</Text>
-          <Button title='>' onPress={() => setQuantidadeProduto((value) => value + 1)}></Button>
+      <View style={styles.container}>
+        <View style={styles.produtoContainer}>
+          <Image source={{ uri: params?.image }} style={styles.produtoImage}></Image>
+          <Text style={styles.titleProduto}>{params?.title}</Text>
+          <Text style={styles.description}>{params?.description}</Text>
+          <Text style={styles.price}>{`R$ ${!params?.price ? 0 : params.price * quantidadeProduto}`}</Text>
+          <View style={styles.buttonContainer}>
+            <Button title='<' onPress={() => setQuantidadeProduto((value) => value === 0 ? value : value - 1)}></Button>
+            <Text style={styles.textButton}>{quantidadeProduto}</Text>
+            <Button title='>' onPress={() => setQuantidadeProduto((value) => value + 1)}></Button>
+          </View>
+          <Button title='Adicionar ao Carrinho' onPress={() => handleAddCarrinho(objectCarrinho)}></Button>
         </View>
-        <Button title='Adicionar ao Carrinho' onPress={() => handleAddCarrinho(objectCarrinho)}></Button>
       </View>
-    </View>
     </ScrollView>
   );
 }
 
 const styles = StyleSheet.create({
-  Container: {
+  container: {
     display: 'flex',
     justifyContent: 'center',
     alignItems: 'center',
     flexDirection: 'column',
-    
+
   },
-  ProdutoContainer: {
+  produtoContainer: {
     display: 'flex',
     justifyContent: 'space-between',
     alignItems: 'center',
     flexDirection: 'column',
     marginTop: 10,
     height: 500,
+    width: '100%'
   },
-  ProdutoImage: {
+  produtoImage: {
     width: 180,
     height: 220,
     display: 'flex',
     justifyContent: 'center',
     alignItems: 'center',
-
   },
-  ButtonContainer: {
-    display: 'flex',
-    justifyContent: 'space-around',
-    alignItems: 'center',
-    flexDirection: 'row',
-    width: '30%'
-  },
-
-TitleProduto:{
-  fontSize: 15,
-  fontWeight:'900',
-  color:'#000'
-},
-
-
-  ContainerCarrinhoItem:{
-    display: 'flex',
-    justifyContent: 'space-around',
-    alignItems: 'center',
-    width:'100%',
-    overflow:'scroll',
-    flexDirection:'row'
-  },
-  ContainerCarrinhoText:{
+  buttonContainer: {
     display: 'flex',
     justifyContent: 'center',
     alignItems: 'center',
-    flexDirection:'column'
+    flexDirection: 'row',
+    width: '100%'
+  },
+  textButton: {
+    marginHorizontal: 15,
+    fontWeight: '900'
+  },
+
+  titleProduto: {
+    fontSize: 15,
+    fontWeight: '900',
+    color: '#000'
+  },
+  description: {
+    textAlign: 'justify',
+    paddingHorizontal: 5
+  },
+  price: {
+    fontSize: 14, 
+    color: '#b71919',
+    fontWeight: '900'
   }
+
 });
 
 

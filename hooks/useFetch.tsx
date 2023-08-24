@@ -1,10 +1,11 @@
 import { useEffect, useState, useRef } from "react";
+import { PropsCarrinho } from "../contexts/carrinhoProvider/interfaces";
 
 
   type Produto = {
     id: string,
     title:string,
-    price:string,
+    price:number,
     category:string,
     description:string,
     image:string

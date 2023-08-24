@@ -22,7 +22,7 @@ import Carrinho from './views/carrinho/Carrinho';
 
 export type RootStackParamList = {
   Home: undefined;
-  Produto: { title:string, image: string, price: string, category: string, description:string } | undefined;
+  Produto: { title:string, image: string, price: number, category: string, description:string, id:string } | undefined;
  Carrinho:  undefined;
 };
 export type StackNavigation = NavigationProp<RootStackParamList>;

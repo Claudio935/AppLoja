@@ -10,7 +10,16 @@ export const reducer = (state: PropsCarrinhoState, action: Action) => {
      if(state?.carrinho)
       return {carrinho:[...state?.carrinho, action.payload]};
    
+      case types.TYPE_DELETE_CARRINHO:
+      
+        if(state?.carrinho){
+          
+          return {carrinho: state?.carrinho.filter((item)=> item.id !== action.payload.id)}
+        }
 
+        
+      
+   
     default:
       return state;
   }

@@ -16,8 +16,11 @@ import { StackNavigation } from '../../App';
 
 
 function Home(): JSX.Element {
+
+
   const navigation = useNavigation<StackNavigation>()
   const { data, loading, error } = useFetch('https://fakestoreapi.com/products')
+  
 
   return (
     <>
@@ -25,20 +28,19 @@ function Home(): JSX.Element {
 
       {!loading &&
         <View>
-          <Image source={require('../../assets/loja.jpg')} style={styles.ImageStyle} ></Image>
+          <Image source={require('../../assets/loja.jpg')} style={styles.imageStyle} ></Image>
           <FlatList data={data}
             numColumns={3}
             keyExtractor={(item) => item.id}
-
             renderItem={({ item }) => {
               return (
-                <TouchableOpacity style={styles.ContainerCard} onPress={() => navigation.navigate('Produto', item)} >
+                <TouchableOpacity style={styles.containerCard} onPress={() => navigation.navigate('Produto',item)} >
                   <Image source={{
                     uri: item.image,
-                  }} style={styles.ProdutoImage}></Image>
-                  <View style={styles.ContainerTextCard}>
-                    <Text style={styles.ProdutoTextTitle}>{item.title}</Text>
-                    <Text style={styles.ProdutoTextPreco}>{`R$ ${item.price}`}</Text>
+                  }} style={styles.produtoImage}></Image>
+                  <View style={styles.containerTextCard}>
+                    <Text style={styles.produtoTextTitle}>{item.title}</Text>
+                    <Text style={styles.produtoTextPreco}>{`R$ ${item.price}`}</Text>
                   </View>
                 </TouchableOpacity>
               )
@@ -52,12 +54,12 @@ function Home(): JSX.Element {
 }
 
 const styles = StyleSheet.create({
-  ImageStyle: {
+  imageStyle: {
     width: '100%',
     height: '20%',
 
   },
-  ContainerCard: {
+  containerCard: {
     display: 'flex',
     flex: 1,
     alignItems: 'center',
@@ -72,23 +74,23 @@ const styles = StyleSheet.create({
     padding: 2
   },
 
-  ProdutoImage: {
+  produtoImage: {
     width: '100%',
     height: "60%",
     borderRadius: 15
   },
-  ContainerTextCard: {
+  containerTextCard: {
     height: "40%",
     width: '100%',
     alignItems: 'center',
     display: 'flex',
 
   },
-  ProdutoTextTitle: {
+  produtoTextTitle: {
     fontSize: 9,
     fontWeight: '800',
   },
-  ProdutoTextPreco: {
+  produtoTextPreco: {
     fontSize: 9,
     fontWeight: '800',
     color: '#ed0e0e'

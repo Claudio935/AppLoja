@@ -15,9 +15,9 @@ export interface Movie {
     title?: string;
     image?: string;
     quantidade?: string;
-    price?: string;
+    price?: number;
     description?: string;
-
+    id?:string;
   
   }
   export type Payload = PropsCarrinho;
