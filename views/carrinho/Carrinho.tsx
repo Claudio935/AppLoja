@@ -1,4 +1,4 @@
-import { RouteProp, useNavigation } from '@react-navigation/native';
+import { useNavigation } from '@react-navigation/native';
 import React, { useContext } from 'react';
 
 import {
@@ -11,14 +11,10 @@ import {
   Button
 } from 'react-native';
 import { CarrinhoContext } from '../../contexts/carrinhoProvider/context';
-import { RootStackParamList, StackNavigation } from '../../App';
-import { PropsCarrinho } from '../../contexts/carrinhoProvider/interfaces';
+import { StackNavigation } from '../../App';
+import { PropsCarrinho } from '../../types/interfaces';
 import { deteleProduto } from '../../contexts/carrinhoProvider/actions';
 
-
-
-
-type ProfileScreenRouteProp = RouteProp<RootStackParamList, 'Carrinho'>;
 
 function Carrinho(): JSX.Element {
 
@@ -44,7 +40,7 @@ function Carrinho(): JSX.Element {
         </View>
         {carrinho.map((item) => {
           return (
-            <View style={styles.containerCarrinhoItem}>
+            <View style={styles.containerCarrinhoItem} key={item.id} >
               <Image source={{ uri: item.image }} style={{ width: '40%', height: '100%' }} />
               <View style={styles.containerCarrinhoTextButton}>
                 <View style={styles.containerCarrinhoText}>

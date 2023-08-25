@@ -12,8 +12,8 @@ import {
 import { CarrinhoContext } from '../../contexts/carrinhoProvider/context';
 import { addProduto } from '../../contexts/carrinhoProvider/actions';
 
-import { PropsCarrinho } from '../../contexts/carrinhoProvider/interfaces';
-import { RootStackParamList, StackNavigation } from '../../App';
+import { PropsCarrinho, RootStackParamList } from '../../types/interfaces';
+import { StackNavigation } from '../../App';
 
 
 
@@ -28,12 +28,12 @@ function Produto(): JSX.Element {
   const { carrinho, dispatch } = useContext(CarrinhoContext)
 
   const [quantidadeProduto, setQuantidadeProduto] = useState(0)
-  const [objectCarrinho, setObjectCarrinho] = useState({
+  const [objectCarrinho, setObjectCarrinho] = useState<PropsCarrinho>({
     title: "",
     image: "",
     quantidade: `${quantidadeProduto}`,
-    price: 0, 
-    id:''
+    price: 0,
+    id: ''
   })
 
   useEffect(() => {
@@ -42,7 +42,7 @@ function Produto(): JSX.Element {
         title: params.title,
         image: params.image,
         quantidade: `${quantidadeProduto}`,
-        price: params?.price * quantidadeProduto,
+        price: typeof params.price === 'number' ? params.price * quantidadeProduto : 0,
         id: params.id
       })
     }
@@ -160,7 +160,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: 5
   },
   price: {
-    fontSize: 14, 
+    fontSize: 14,
     color: '#b71919',
     fontWeight: '900'
   }

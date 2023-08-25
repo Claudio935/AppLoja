@@ -1,24 +1,17 @@
 import { useEffect, useState, useRef } from "react";
-import { PropsCarrinho } from "../contexts/carrinhoProvider/interfaces";
+import { PropsCarrinho } from "../types/interfaces";
 
 
-  type Produto = {
-    id: string,
-    title:string,
-    price:number,
-    category:string,
-    description:string,
-    image:string
-  }
+
   type Fetch = {
-    data: Produto[],
+    data: PropsCarrinho[],
     loading: Boolean,
     error:Boolean
   }
 
 export const useFetch = (url: string):Fetch  => {
     const [loading, setLoading] = useState(false);
-    const [data, setData] = useState<Produto[]>([]);
+    const [data, setData] = useState<PropsCarrinho[]>([]);
     const [error, setError] = useState(false);
     const [shouldLoad, setShouldLoad] = useState(false);
     const urlRef = useRef(url);

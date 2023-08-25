@@ -1,100 +1,100 @@
-import React from 'react';
-
+import React, { useState, useEffect } from 'react';
 import {
   Image,
   StyleSheet,
   Text,
   View,
-  FlatList,
-  TouchableOpacity
+  ScrollView,
+  ActivityIndicator
 } from 'react-native';
-import Header from '../../components/header/Header';
+import Header from './Header';
 import { useFetch } from '../../hooks/useFetch';
-import { useNavigation } from '@react-navigation/native';
-import { StackNavigation } from '../../App';
+import { ProdutosType} from '../../types/interfaces';
+import SectionProduto from './Section';
 
 
 
 function Home(): JSX.Element {
 
-
-  const navigation = useNavigation<StackNavigation>()
+  const [produtos, setProdutos] = useState<ProdutosType>({
+    roupaHomem: [],
+    roupaMulher: [],
+    joias: [],
+    eletronicos: [],
+  })
+ 
   const { data, loading, error } = useFetch('https://fakestoreapi.com/products')
+
+  useEffect(() => {
+
+    const roupaHomem = data.filter((item) => item.category === "men's clothing")
+    const roupaMulher = data.filter((item) => item.category === "women's clothing")
+    const joias = data.filter((item) => item.category === "jewelery",)
+    const eletronicos = data.filter((item) => item.category === "electronics")
+    setProdutos({
+      roupaHomem: roupaHomem,
+      roupaMulher: roupaMulher,
+      joias: joias,
+      eletronicos: eletronicos,
+
+
+    })
+  }, [data])
+
+  if(loading){
+    return(
+      <View style={[styles.containerLoading]}>
+   
+      <ActivityIndicator size="large" color="#0000ff" />
+    
+    </View>
+    )
+  }
+  else{
+    return (
+      <>
+        <Header></Header>
+          <View>
+            <Image source={require('../../assets/loja.jpg')} style={styles.imageStyle} ></Image>
+            <ScrollView>
+              <Text style={styles.titleCategoria}>Moda masculina</Text>
+              <SectionProduto dados={produtos.roupaHomem} />
+              <Text style={styles.titleCategoria}>Moda Feminina</Text>
+              <SectionProduto dados={produtos.roupaMulher} />
+              <Text style={styles.titleCategoria}>Eletronicos</Text>
+              <SectionProduto dados={produtos.eletronicos} />
+              <Text style={styles.titleCategoria}>Joias</Text>
+              <SectionProduto dados={produtos.joias} />
+            </ScrollView>
+          </View>
+        
   
+      </>
+    );
+  }
 
-  return (
-    <>
-      <Header></Header>
-
-      {!loading &&
-        <View>
-          <Image source={require('../../assets/loja.jpg')} style={styles.imageStyle} ></Image>
-          <FlatList data={data}
-            numColumns={3}
-            keyExtractor={(item) => item.id}
-            renderItem={({ item }) => {
-              return (
-                <TouchableOpacity style={styles.containerCard} onPress={() => navigation.navigate('Produto',item)} >
-                  <Image source={{
-                    uri: item.image,
-                  }} style={styles.produtoImage}></Image>
-                  <View style={styles.containerTextCard}>
-                    <Text style={styles.produtoTextTitle}>{item.title}</Text>
-                    <Text style={styles.produtoTextPreco}>{`R$ ${item.price}`}</Text>
-                  </View>
-                </TouchableOpacity>
-              )
-            }}
-          />
-        </View>
-      }
-
-    </>
-  );
 }
 
 const styles = StyleSheet.create({
+  containerLoading: {
+    flex: 1,
+    justifyContent: 'center',
+    flexDirection: 'row',
+    padding: 10,
+  },
+ 
   imageStyle: {
     width: '100%',
     height: '20%',
-
   },
-  containerCard: {
-    display: 'flex',
-    flex: 1,
-    alignItems: 'center',
-    justifyContent: 'center',
-    width: 100,
-    height: 150,
-    flexDirection: 'column',
-    margin: 15,
-    background: '#c52222',
-    borderRadius: 15,
-    border: '1px solid #000',
-    padding: 2
+  titleCategoria: {
+    fontSize: 25,
+    fontWeight: '900',
+    color: '#000',
+    marginVertical: 15,
+    marginLeft: 5
   },
-
-  produtoImage: {
-    width: '100%',
-    height: "60%",
-    borderRadius: 15
-  },
-  containerTextCard: {
-    height: "40%",
-    width: '100%',
-    alignItems: 'center',
-    display: 'flex',
-
-  },
-  produtoTextTitle: {
-    fontSize: 9,
-    fontWeight: '800',
-  },
-  produtoTextPreco: {
-    fontSize: 9,
-    fontWeight: '800',
-    color: '#ed0e0e'
-  }
+  
 });
 
 export default Home;

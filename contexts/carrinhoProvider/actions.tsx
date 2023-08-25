@@ -1,4 +1,4 @@
-import { Action, Payload } from "./interfaces"
+import { Action, Payload } from "../../types/interfaces"
 import { types } from "./types"
 
 export const addProduto = (dispatch: React.Dispatch<Action>, payload:Payload) =>{

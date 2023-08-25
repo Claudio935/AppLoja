@@ -1,16 +1,11 @@
 import React,{ createContext } from 'react'
-import { Action, PropsCarrinho } from './interfaces';
+import { Action, PropsCarrinho, PropsCarrinhoState } from '../../types/interfaces';
 
 
 
 
 
 
-export type PropsCarrinhoState = {
-  carrinho: PropsCarrinho[]
-  dispatch?:React.Dispatch<Action>
-}
- 
 
 
 

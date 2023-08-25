@@ -1,7 +1,7 @@
 import {useReducer} from "react"
-import { CarrinhoContext, PropsCarrinhoState, defaultValue } from "./carrinhoProvider/context";
+import { CarrinhoContext,  defaultValue } from "./carrinhoProvider/context";
 import { reducer } from "./carrinhoProvider/reducer";
-import { PropsCarrinho } from "./carrinhoProvider/interfaces";
+import { PropsCarrinho } from "../types/interfaces";
 
 interface Props {
    
