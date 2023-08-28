@@ -10,7 +10,7 @@ import { PropsCarrinho } from "../types/interfaces";
   }
 
 export const useFetch = (url: string):Fetch  => {
-    const [loading, setLoading] = useState(false);
+    const [loading, setLoading] = useState(true);
     const [data, setData] = useState<PropsCarrinho[]>([]);
     const [error, setError] = useState(false);
     const [shouldLoad, setShouldLoad] = useState(false);
@@ -27,25 +27,27 @@ export const useFetch = (url: string):Fetch  => {
       if (url.length === 0) {
         return;
       }
-      if (loading) {
-        return;
-      }
-  
-     
+
+     if(url.length>0 && loading ){
+      return
+     }
+   
       const fetchData = async () => {
         try {
-          setLoading(true);
+         
           const dataPromise = await fetch(url);
           const dataResult = await dataPromise.json();
           
           setData(dataResult);
-          setLoading(false);
+          
         } catch (error) {
-          console.error("Ocorreu um erro:", error);
           setError(true);
+        }finally {
+          setLoading(false);
         }
-        setLoading(false);
+       
       };
+      
   
       fetchData();
       // eslint-disable-next-line

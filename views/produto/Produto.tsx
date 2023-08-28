@@ -98,16 +98,16 @@ function Produto(): JSX.Element {
     <ScrollView>
       <View style={styles.container}>
         <View style={styles.produtoContainer}>
-          <Image source={{ uri: params?.image }} style={styles.produtoImage}></Image>
+          <Image source={{ uri: params?.image }} style={styles.produtoImage} testID='imageProduto'></Image>
           <Text style={styles.titleProduto}>{params?.title}</Text>
           <Text style={styles.description}>{params?.description}</Text>
           <Text style={styles.price}>{`R$ ${!params?.price ? 0 : params.price * quantidadeProduto}`}</Text>
           <View style={styles.buttonContainer}>
-            <Button title='<' onPress={() => setQuantidadeProduto((value) => value === 0 ? value : value - 1)}></Button>
-            <Text style={styles.textButton}>{quantidadeProduto}</Text>
-            <Button title='>' onPress={() => setQuantidadeProduto((value) => value + 1)}></Button>
+            <Button title='<' onPress={() => setQuantidadeProduto((value) => value === 0 ? value : value - 1)} testID='decrement'></Button>
+            <Text style={styles.textButton} testID='textQuantidade'>{quantidadeProduto}</Text>
+            <Button title='>' onPress={() => setQuantidadeProduto((value) => value + 1)} testID='increment'></Button>
           </View>
-          <Button title='Adicionar ao Carrinho' onPress={() => handleAddCarrinho(objectCarrinho)}></Button>
+          <Button title='Adicionar ao Carrinho' onPress={() => handleAddCarrinho(objectCarrinho)} testID='carrinhoButton'></Button>
         </View>
       </View>
     </ScrollView>

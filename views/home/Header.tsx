@@ -15,15 +15,15 @@ function Header(): JSX.Element {
 
   const navigation = useNavigation<StackNavigation>()
 
-  const carrinhoIcon = require("../../assets/icones/carrinhoIcone.png");
+  const icone = require("../../assets/icones/carrinhoIcone.png")
   return (
     <View style={styles.HeaderContainer}>
       <View style={styles.ContainerTextLojaNome}>
         <Text style={styles.TitleLoja}>Mundo das vendas</Text>
         <Text style={styles.SubtitleLoja}>Seu Aplicativo de vendas!</Text>
       </View>
-      <TouchableOpacity onPress={() => navigation.navigate('Carrinho')} style={styles.carrinhoIcon}>
-        <Image source={carrinhoIcon} style={styles.imageIcon}></Image>
+      <TouchableOpacity onPress={() => navigation.navigate('Carrinho')} style={styles.carrinhoIcon} testID='iconTouch'>
+        <Image source={icone} style={styles.imageIcon} testID='headerIconImage'></Image>
       </TouchableOpacity>
     </View>
   );

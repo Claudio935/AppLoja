@@ -11,6 +11,8 @@ import { Action, PropsCarrinho, PropsCarrinhoState } from '../../types/interface
 
 export const defaultValue: PropsCarrinhoState =  {
   carrinho:[
+    
+   
   ]}
 
 

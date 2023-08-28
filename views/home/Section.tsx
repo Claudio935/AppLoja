@@ -20,10 +20,10 @@ const SectionProduto = ({ dados }: { dados: PropsCarrinho[] }) => {
         {dados.map((item) => {
           return (
 
-            <TouchableOpacity style={styles.containerCard} onPress={() => navigation.navigate('Produto', item)} key={item.id} >
+            <TouchableOpacity style={styles.containerCard} onPress={() => navigation.navigate('Produto', item)} key={item.id} testID={`imageProdutoButton${item.id}`} >
               <Image source={{
                 uri: item.image,
-              }} style={styles.produtoImage}></Image>
+              }} style={styles.produtoImage} testID={`imageProdudo${item.id}`}></Image>
               <View style={styles.containerTextCard}>
                 <Text style={styles.produtoTextTitle}>{item.title}</Text>
                 <Text style={styles.produtoTextPreco}>{`R$ ${item.price}`}</Text>

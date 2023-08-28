@@ -11,6 +11,7 @@ import Header from './Header';
 import { useFetch } from '../../hooks/useFetch';
 import { ProdutosType} from '../../types/interfaces';
 import SectionProduto from './Section';
+import { logDOM } from '@testing-library/react';
 
 
 
@@ -36,28 +37,37 @@ function Home(): JSX.Element {
       roupaMulher: roupaMulher,
       joias: joias,
       eletronicos: eletronicos,
-
-
     })
   }, [data])
 
+  
+  
+  
   if(loading){
     return(
       <View style={[styles.containerLoading]}>
    
-      <ActivityIndicator size="large" color="#0000ff" />
+      <ActivityIndicator size="large" color="#0000ff" testID='loading'/>
     
     </View>
     )
   }
-  else{
+  if(error){
+    return(<View style={[styles.containerLoading]}>
+   
+      <Text>Erro no banco de dados...</Text>
+    
+    </View>)
+  }
+
+ 
     return (
       <>
         <Header></Header>
           <View>
-            <Image source={require('../../assets/loja.jpg')} style={styles.imageStyle} ></Image>
+            <Image source={require('../../assets/loja.jpg')} testID='imagePrincipal' style={styles.imageStyle} ></Image>
             <ScrollView>
-              <Text style={styles.titleCategoria}>Moda masculina</Text>
+              <Text style={styles.titleCategoria}>Moda Masculina</Text>
               <SectionProduto dados={produtos.roupaHomem} />
               <Text style={styles.titleCategoria}>Moda Feminina</Text>
               <SectionProduto dados={produtos.roupaMulher} />
@@ -71,9 +81,9 @@ function Home(): JSX.Element {
   
       </>
     );
-  }
+  };
 
-}
+
 
 const styles = StyleSheet.create({
   containerLoading: {

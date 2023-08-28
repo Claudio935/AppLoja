@@ -36,7 +36,7 @@ function Carrinho(): JSX.Element {
       <View style={styles.container}>
         <View style={styles.containerHeader}>
           <Text style={styles.titleCarrinho}>Itens do carrinho</Text>
-          <Button title='Adicionar novos itens' color={'#1acd20'} onPress={() => navigation.navigate('Home')}></Button>
+          <Button testID="voltarHomeButton" title='Adicionar novos itens' color={'#1acd20'} onPress={() => navigation.navigate('Home')}></Button>
         </View>
         {carrinho.map((item) => {
           return (
@@ -48,7 +48,7 @@ function Carrinho(): JSX.Element {
                   <Text style={styles.quantidade}>Quantidade: {item.quantidade}</Text>
                   <Text style={styles.price}> R$ {item.price}</Text>
                 </View>
-                <TouchableOpacity style={styles.button} onPress={() => handleDelete(item)}>
+                <TouchableOpacity testID={"retirarCarrinho"}style={styles.button} onPress={() => handleDelete(item)}>
                   <Text style={styles.textButton}>Retirar do Carrinho</Text>
                 </TouchableOpacity>
               </View>

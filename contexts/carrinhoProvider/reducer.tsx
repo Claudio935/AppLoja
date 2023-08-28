@@ -1,5 +1,4 @@
-import { PropsCarrinhoState } from "./context";
-import { Action, PropsCarrinho, PropsUserContextState } from "../../types/interfaces";
+import { Action, PropsCarrinho, PropsCarrinhoState } from "../../types/interfaces";
 import { types } from "./types";
 
 export const reducer = (state: PropsCarrinhoState, action: Action) => {
@@ -17,8 +16,6 @@ export const reducer = (state: PropsCarrinhoState, action: Action) => {
           return {carrinho: state?.carrinho.filter((item)=> item.id !== action.payload.id)}
         }
 
-        
-      
    
     default:
       return state;
