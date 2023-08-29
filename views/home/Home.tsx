@@ -8,10 +8,10 @@ import {
   ActivityIndicator
 } from 'react-native';
 import Header from './Header';
-import { useFetch } from '../../hooks/useFetch';
+import  useFetch  from '../../hooks/useFetch';
 import { ProdutosType} from '../../types/interfaces';
 import SectionProduto from './Section';
-import { logDOM } from '@testing-library/react';
+
 
 
 
@@ -22,9 +22,9 @@ function Home(): JSX.Element {
     roupaMulher: [],
     joias: [],
     eletronicos: [],
-  })
+  });
  
-  const { data, loading, error } = useFetch('https://fakestoreapi.com/products')
+  const { data, loading, error } = useFetch('https://fakestoreapi.com/products');
 
   useEffect(() => {
 
@@ -38,7 +38,7 @@ function Home(): JSX.Element {
       joias: joias,
       eletronicos: eletronicos,
     })
-  }, [data])
+  }, [data]);
 
   
   
@@ -57,8 +57,8 @@ function Home(): JSX.Element {
    
       <Text>Erro no banco de dados...</Text>
     
-    </View>)
-  }
+    </View>);
+  };
 
  
     return (

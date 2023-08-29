@@ -1,6 +1,4 @@
 export const types = {
     TYPE_ADD_CARRINHO:"TYPE_ADD_CARRINHO",
     TYPE_DELETE_CARRINHO:"TYPE_DELETE_CARRINHO"
-   
-    
 }

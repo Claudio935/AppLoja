@@ -13,9 +13,9 @@ import { StackNavigation } from '../../App';
 
 function Header(): JSX.Element {
 
-  const navigation = useNavigation<StackNavigation>()
+  const navigation = useNavigation<StackNavigation>();
 
-  const icone = require("../../assets/icones/carrinhoIcone.png")
+  const icone = require("../../assets/icones/carrinhoIcone.png");
   return (
     <View style={styles.HeaderContainer}>
       <View style={styles.ContainerTextLojaNome}>
@@ -27,7 +27,7 @@ function Header(): JSX.Element {
       </TouchableOpacity>
     </View>
   );
-}
+};
 
 const styles = StyleSheet.create({
   HeaderContainer: {

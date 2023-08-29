@@ -11,7 +11,6 @@ import {
 } from 'react-native';
 import { CarrinhoContext } from '../../contexts/carrinhoProvider/context';
 import { addProduto } from '../../contexts/carrinhoProvider/actions';
-
 import { PropsCarrinho, RootStackParamList } from '../../types/interfaces';
 import { StackNavigation } from '../../App';
 
@@ -24,17 +23,17 @@ function Produto(): JSX.Element {
 
   const { params } = useRoute<ProfileScreenRouteProp>();
 
-  const navigation = useNavigation<StackNavigation>()
-  const { carrinho, dispatch } = useContext(CarrinhoContext)
+  const navigation = useNavigation<StackNavigation>();
+  const { carrinho, dispatch } = useContext(CarrinhoContext);
 
-  const [quantidadeProduto, setQuantidadeProduto] = useState(0)
+  const [quantidadeProduto, setQuantidadeProduto] = useState(0);
   const [objectCarrinho, setObjectCarrinho] = useState<PropsCarrinho>({
     title: "",
     image: "",
     quantidade: `${quantidadeProduto}`,
     price: 0,
     id: ''
-  })
+  });
 
   useEffect(() => {
     if (!!params) {
@@ -47,7 +46,7 @@ function Produto(): JSX.Element {
       })
     }
 
-  }, [params, quantidadeProduto])
+  }, [params, quantidadeProduto]);
 
 
   const handleAddCarrinho = (item: PropsCarrinho) => {
@@ -64,9 +63,9 @@ function Produto(): JSX.Element {
         ]
       );
       return
-    }
+    };
 
-    if (carrinho.filter((objeto) => objeto.title === params?.title).length > 0) {
+    if (carrinho.filter((objeto) => objeto.id === params?.id).length > 0) {
       Alert.alert(
         "Alerta",
         "Produto já adicionado?",
@@ -90,7 +89,7 @@ function Produto(): JSX.Element {
       })
     }
     navigation.navigate('Carrinho')
-  }
+  };
 
 
 
@@ -112,7 +111,7 @@ function Produto(): JSX.Element {
       </View>
     </ScrollView>
   );
-}
+};
 
 const styles = StyleSheet.create({
   container: {

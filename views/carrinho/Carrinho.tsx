@@ -1,6 +1,5 @@
 import { useNavigation } from '@react-navigation/native';
 import React, { useContext } from 'react';
-
 import {
   Image,
   StyleSheet,
@@ -8,7 +7,8 @@ import {
   View,
   ScrollView,
   TouchableOpacity,
-  Button
+  Button,
+  Alert
 } from 'react-native';
 import { CarrinhoContext } from '../../contexts/carrinhoProvider/context';
 import { StackNavigation } from '../../App';
@@ -18,18 +18,29 @@ import { deteleProduto } from '../../contexts/carrinhoProvider/actions';
 
 function Carrinho(): JSX.Element {
 
-  const { carrinho, dispatch } = useContext(CarrinhoContext)
+  const { carrinho, dispatch } = useContext(CarrinhoContext);
 
-  const navigation = useNavigation<StackNavigation>()
+  const navigation = useNavigation<StackNavigation>();
 
   const handleDelete = (objectProduto: PropsCarrinho) => {
     if (!objectProduto.id) {
+      Alert.alert(
+        "Alerta",
+        "Não existe id para esse produto",
+        [
+          {
+            text: "Cancelar",
+            style: "cancel"
+          },
+
+        ]
+      );
       return
-    }
+    };
     if (!!dispatch) {
       deteleProduto(dispatch, objectProduto)
-    }
-  }
+    };
+  };
 
   return (
     <ScrollView>
@@ -38,9 +49,9 @@ function Carrinho(): JSX.Element {
           <Text style={styles.titleCarrinho}>Itens do carrinho</Text>
           <Button testID="voltarHomeButton" title='Adicionar novos itens' color={'#1acd20'} onPress={() => navigation.navigate('Home')}></Button>
         </View>
-        {carrinho.map((item) => {
+        {carrinho.map((item,index) => {
           return (
-            <View style={styles.containerCarrinhoItem} key={item.id} >
+            <View style={styles.containerCarrinhoItem} key={index} >
               <Image source={{ uri: item.image }} style={{ width: '40%', height: '100%' }} />
               <View style={styles.containerCarrinhoTextButton}>
                 <View style={styles.containerCarrinhoText}>
@@ -48,7 +59,7 @@ function Carrinho(): JSX.Element {
                   <Text style={styles.quantidade}>Quantidade: {item.quantidade}</Text>
                   <Text style={styles.price}> R$ {item.price}</Text>
                 </View>
-                <TouchableOpacity testID={"retirarCarrinho"}style={styles.button} onPress={() => handleDelete(item)}>
+                <TouchableOpacity testID={"retirarCarrinho"} style={styles.button} onPress={() => handleDelete(item)}>
                   <Text style={styles.textButton}>Retirar do Carrinho</Text>
                 </TouchableOpacity>
               </View>
@@ -58,7 +69,7 @@ function Carrinho(): JSX.Element {
       </View>
     </ScrollView>
   );
-}
+};
 
 const styles = StyleSheet.create({
   containerHeader: {

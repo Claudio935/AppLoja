@@ -1,12 +1,15 @@
 import { NavigationContainer } from "@react-navigation/native";
 import { render, screen, fireEvent } from "@testing-library/react-native";
 import "@testing-library/jest-dom";
+import React from "react";
+import { Alert } from "react-native";
+import renderer from 'react-test-renderer';
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import { RootStackParamList } from "../types/interfaces";
 import Produto from "../views/produto/Produto";
 import Carrinho from "../views/carrinho/Carrinho";
 import { CarrinhoProvider } from "../contexts";
-import React from "react";
+import { CarrinhoContext } from "../contexts/carrinhoProvider/context";
 
 const mockCarrinho = {
   title: 'testMasculino',
@@ -16,7 +19,19 @@ const mockCarrinho = {
   id: '1',
   category: "men's clothing"
 };
-
+const mockUseContext = {
+  carrinho: [
+    {
+      title: 'testMasculino',
+      image: './img/test',
+      price: 1.5,
+      description: 'testandoMasculino',
+      id: '1',
+      category: "men's clothing"
+    }
+  ],
+  dispatch: jest.fn()
+}
 
 jest.mock('@react-navigation/native', () => ({
   ...jest.requireActual('@react-navigation/native'),
@@ -25,16 +40,34 @@ jest.mock('@react-navigation/native', () => ({
   }),
 }));
 
+jest.mock('react-native', () => {
+  const RN = jest.requireActual('react-native');
+  RN.Alert.alert = jest.fn();
+  return RN;
+});
 
-describe("<Home />", () => {
-  it("should render a header of the Home with Text and Button", async () => {
+describe("<Produto />", () => {
+  it('renders correctly', () => {
+    const Stack = createNativeStackNavigator<RootStackParamList>();
+ 
+    const tree = renderer
+      .create( <CarrinhoProvider>
+        <NavigationContainer>
+          <Stack.Navigator>
+            <Stack.Screen name="Produto" component={Produto} />
+            <Stack.Screen name="Carrinho" component={Carrinho} />
+          </Stack.Navigator>
+        </NavigationContainer>
+      </CarrinhoProvider>)
+      .toJSON();
+    expect(tree).toMatchSnapshot();
+  });
+  it("should render and show components ", async () => {
 
     const Stack = createNativeStackNavigator<RootStackParamList>();
 
-    const useContextSpy = jest.spyOn(React, 'useContext');
-    useContextSpy.mockReturnValue(mockCarrinho);
 
-  render(
+    render(
       <CarrinhoProvider>
         <NavigationContainer>
           <Stack.Navigator>
@@ -50,31 +83,32 @@ describe("<Home />", () => {
     const imgProduto = screen.getByTestId('imageProduto');
     const titleProduto = screen.getByText(`${mockCarrinho.title}`)
     const descriptionProduto = screen.getByText(`${mockCarrinho.description}`);
+    expect(imgProduto).toBeTruthy();
     expect(titleProduto).toBeTruthy();
     expect(descriptionProduto).toBeTruthy();
     expect(imgProduto.props.source.uri).toEqual(`${mockCarrinho.image}`);
 
 
-    useContextSpy.mockRestore();
+
 
 
   });
-  it("Test the quantity and price change action of an item on button click and page navigation on another button click.", async () => {
+  it("changes quantity and price correctly.", async () => {
 
     const Stack = createNativeStackNavigator<RootStackParamList>();
 
     const useContextSpy = jest.spyOn(React, 'useContext');
-    useContextSpy.mockReturnValue(mockCarrinho);
+    useContextSpy.mockReturnValue(mockUseContext);
 
     render(
-      <CarrinhoProvider>
+      <CarrinhoContext.Provider value={mockUseContext}>
         <NavigationContainer>
           <Stack.Navigator>
             <Stack.Screen name="Produto" component={Produto} />
             <Stack.Screen name="Carrinho" component={Carrinho} />
           </Stack.Navigator>
         </NavigationContainer>
-      </CarrinhoProvider>
+      </CarrinhoContext.Provider>
 
     );
 
@@ -89,8 +123,10 @@ describe("<Home />", () => {
 
     expect(textButtonQuantidadeIncrement).toBeTruthy();
     expect(textButtonQuantidadeDecrement).toBeTruthy();
-    
+
     expect(buttonQuantidadeIncrement).toBeTruthy();
+    expect(buttonQuantidadeDecrement).toBeTruthy();
+
     fireEvent.press(buttonQuantidadeIncrement);
     fireEvent.press(buttonQuantidadeIncrement);
 
@@ -98,13 +134,86 @@ describe("<Home />", () => {
     fireEvent.press(buttonQuantidadeDecrement);
     expect(textQuantidade.props.children).toEqual(1);
 
+    
+
 
     const textPrice = screen.getByText(`R$ ${mockCarrinho.price}`);
 
     expect(textPrice).toBeTruthy();
 
+    fireEvent.press(buttonQuantidadeDecrement);
+    fireEvent.press(buttonQuantidadeDecrement);
+    expect(textQuantidade.props.children).toEqual(0);
 
-    //mudança de página
+  
+
+
+
+  });
+  it("Test the quantity and price change action of an item on button click and show alert id", async () => {
+
+    const Stack = createNativeStackNavigator<RootStackParamList>();
+
+    const useContextSpy = jest.spyOn(React, 'useContext');
+    useContextSpy.mockReturnValue(mockUseContext);
+
+    render(
+      <CarrinhoContext.Provider value={mockUseContext}>
+        <NavigationContainer>
+          <Stack.Navigator>
+            <Stack.Screen name="Produto" component={Produto} />
+            <Stack.Screen name="Carrinho" component={Carrinho} />
+          </Stack.Navigator>
+        </NavigationContainer>
+      </CarrinhoContext.Provider>
+
+    );
+
+
+    const buttonQuantidadeIncrement = screen.getByTestId("increment");
+    fireEvent.press(buttonQuantidadeIncrement);
+
+    //testando o alert da quantidade
+    const texButton = screen.getByText('Adicionar ao Carrinho');
+    expect(texButton).toBeTruthy();
+    const button = screen.getByTestId('carrinhoButton');
+
+    fireEvent.press(button);
+
+    expect(Alert.alert as jest.Mock).toHaveBeenCalledWith("Alerta",
+      "Produto já adicionado?",
+      [
+        {
+          text: "Cancelar",
+          style: "cancel"
+        },
+
+      ]);
+
+
+
+
+  });
+  it("shows alert for lack of product quantity", async () => {
+
+    const Stack = createNativeStackNavigator<RootStackParamList>();
+
+  
+
+    render(
+      <CarrinhoProvider>
+        <NavigationContainer>
+          <Stack.Navigator>
+            <Stack.Screen name="Produto" component={Produto} />
+            <Stack.Screen name="Carrinho" component={Carrinho} />
+          </Stack.Navigator>
+        </NavigationContainer>
+      </CarrinhoProvider>
+
+    );
+
+
+   
     const texButton = screen.getByText('Adicionar ao Carrinho');
     expect(texButton).toBeTruthy();
     const button = screen.getByTestId('carrinhoButton');
@@ -112,12 +221,19 @@ describe("<Home />", () => {
     fireEvent.press(button);
 
 
-    const titleCarrinho = await screen.findByText('Itens do carrinho');
+    expect(Alert.alert as jest.Mock).toHaveBeenCalledWith("Alerta",
+      "Adicione uma quantidade de produto",
+      [
+        {
+          text: "Cancelar",
+          style: "cancel"
+        },
 
-    expect(titleCarrinho).toBeTruthy();
+      ]);
+     
+  });
 
-    useContextSpy.mockRestore();
-
-
+  afterEach(() => {
+    jest.restoreAllMocks();
   });
 });

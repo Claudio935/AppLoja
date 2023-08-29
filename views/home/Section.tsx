@@ -14,7 +14,7 @@ import { StackNavigation } from '../../App';
 
 
 const SectionProduto = ({ dados }: { dados: PropsCarrinho[] }) => {
-    const navigation = useNavigation<StackNavigation>()
+    const navigation = useNavigation<StackNavigation>();
     return (
       <ScrollView horizontal={true} showsHorizontalScrollIndicator={false}>
         {dados.map((item) => {
@@ -30,12 +30,12 @@ const SectionProduto = ({ dados }: { dados: PropsCarrinho[] }) => {
               </View>
             </TouchableOpacity>
 
-          )
+          );
         })
         }
       </ScrollView>
-    )
-  }
+    );
+  };
 
   const styles = StyleSheet.create({
    
