@@ -15,7 +15,7 @@ import { mockCarrinho } from "../dadosMock/dadosMock";
 
 const mockUseContext = {
   carrinho: [
-  mockCarrinho[0]
+    mockCarrinho[0]
   ],
   dispatch: jest.fn()
 }
@@ -36,9 +36,9 @@ jest.mock('react-native', () => {
 describe("<Produto />", () => {
   it('renders correctly', () => {
     const Stack = createNativeStackNavigator<RootStackParamList>();
- 
+
     const tree = renderer
-      .create( <CarrinhoProvider>
+      .create(<CarrinhoProvider>
         <NavigationContainer>
           <Stack.Navigator>
             <Stack.Screen name="Produto" component={Produto} />
@@ -121,7 +121,7 @@ describe("<Produto />", () => {
     fireEvent.press(buttonQuantidadeDecrement);
     expect(textQuantidade.props.children).toEqual(1);
 
-    
+
 
 
     const textPrice = screen.getByText(`R$ ${mockCarrinho[0].price}`);
@@ -132,7 +132,7 @@ describe("<Produto />", () => {
     fireEvent.press(buttonQuantidadeDecrement);
     expect(textQuantidade.props.children).toEqual(0);
 
-  
+
 
 
 
@@ -185,7 +185,7 @@ describe("<Produto />", () => {
 
     const Stack = createNativeStackNavigator<RootStackParamList>();
 
-  
+
 
     render(
       <CarrinhoProvider>
@@ -200,7 +200,7 @@ describe("<Produto />", () => {
     );
 
 
-   
+
     const texButton = screen.getByText('Adicionar ao Carrinho');
     expect(texButton).toBeTruthy();
     const button = screen.getByTestId('carrinhoButton');
@@ -217,7 +217,7 @@ describe("<Produto />", () => {
         },
 
       ]);
-     
+
   });
 
   afterEach(() => {

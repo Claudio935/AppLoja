@@ -49,7 +49,7 @@ function Carrinho(): JSX.Element {
           <Text style={styles.titleCarrinho}>Itens do carrinho</Text>
           <Button testID="voltarHomeButton" title='Adicionar novos itens' color={'#1acd20'} onPress={() => navigation.navigate('Home')}></Button>
         </View>
-        {carrinho.map((item,index) => {
+        {carrinho.map((item, index) => {
           return (
             <View style={styles.containerCarrinhoItem} key={index} >
               <Image source={{ uri: item.image }} style={{ width: '40%', height: '100%' }} />

@@ -8,8 +8,8 @@ import {
   ActivityIndicator
 } from 'react-native';
 import Header from './Header';
-import  useFetch  from '../../hooks/useFetch';
-import { ProdutosType} from '../../types/interfaces';
+import useFetch from '../../hooks/useFetch';
+import { ProdutosType } from '../../types/interfaces';
 import SectionProduto from './Section';
 
 
@@ -23,7 +23,7 @@ function Home(): JSX.Element {
     joias: [],
     eletronicos: [],
   });
- 
+
   const { data, loading, error } = useFetch('https://fakestoreapi.com/products');
 
   useEffect(() => {
@@ -40,48 +40,48 @@ function Home(): JSX.Element {
     })
   }, [data]);
 
-  
-  
-  
-  if(loading){
-    return(
+
+
+
+  if (loading) {
+    return (
       <View style={[styles.containerLoading]}>
-   
-      <ActivityIndicator size="large" color="#0000ff" testID='loading'/>
-    
-    </View>
+
+        <ActivityIndicator size="large" color="#0000ff" testID='loading' />
+
+      </View>
     )
   }
-  if(error){
-    return(<View style={[styles.containerLoading]}>
-   
+  if (error) {
+    return (<View style={[styles.containerLoading]}>
+
       <Text>Erro no banco de dados...</Text>
-    
+
     </View>);
   };
 
- 
-    return (
-      <>
-        <Header></Header>
-          <View>
-            <Image source={require('../../assets/loja.jpg')} testID='imagePrincipal' style={styles.imageStyle} ></Image>
-            <ScrollView>
-              <Text style={styles.titleCategoria}>Moda Masculina</Text>
-              <SectionProduto dados={produtos.roupaHomem} />
-              <Text style={styles.titleCategoria}>Moda Feminina</Text>
-              <SectionProduto dados={produtos.roupaMulher} />
-              <Text style={styles.titleCategoria}>Eletronicos</Text>
-              <SectionProduto dados={produtos.eletronicos} />
-              <Text style={styles.titleCategoria}>Joias</Text>
-              <SectionProduto dados={produtos.joias} />
-            </ScrollView>
-          </View>
-        
-  
-      </>
-    );
-  };
+
+  return (
+    <>
+      <Header></Header>
+      <View>
+        <Image source={require('../../assets/loja.jpg')} testID='imagePrincipal' style={styles.imageStyle} ></Image>
+        <ScrollView>
+          <Text style={styles.titleCategoria}>Moda Masculina</Text>
+          <SectionProduto dados={produtos.roupaHomem} />
+          <Text style={styles.titleCategoria}>Moda Feminina</Text>
+          <SectionProduto dados={produtos.roupaMulher} />
+          <Text style={styles.titleCategoria}>Eletronicos</Text>
+          <SectionProduto dados={produtos.eletronicos} />
+          <Text style={styles.titleCategoria}>Joias</Text>
+          <SectionProduto dados={produtos.joias} />
+        </ScrollView>
+      </View>
+
+
+    </>
+  );
+};
 
 
 
@@ -92,7 +92,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     padding: 10,
   },
- 
+
   imageStyle: {
     width: '100%',
     height: '20%',
@@ -104,7 +104,7 @@ const styles = StyleSheet.create({
     marginVertical: 15,
     marginLeft: 5
   },
-  
+
 });
 
 export default Home;
