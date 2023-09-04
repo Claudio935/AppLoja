@@ -4,12 +4,9 @@ exports[`<Produto /> renders correctly 1`] = `
 <RNCSafeAreaProvider
   onInsetsChange={[Function]}
   style={
-    [
-      {
-        "flex": 1,
-      },
-      undefined,
-    ]
+    {
+      "flex": 1,
+    }
   }
 >
   <RNSScreenStack
@@ -122,7 +119,7 @@ exports[`<Produto /> renders correctly 1`] = `
                   <Image
                     source={
                       {
-                        "uri": "./img/test",
+                        "uri": "./img/testMasculino",
                       }
                     }
                     style={

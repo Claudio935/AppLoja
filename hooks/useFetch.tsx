@@ -50,7 +50,7 @@ const useFetch = (url: string):Fetch  => {
       fetchData();
       // eslint-disable-next-line
     }, [shouldLoad]);
-    useEffect(()=>{console.log(error, data)},[error])
+   
   
     return { data, loading, error };
   };

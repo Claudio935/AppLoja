@@ -10,17 +10,11 @@ import { RootStackParamList } from "../types/interfaces";
 import Produto from "../views/produto/Produto";
 import Carrinho from "../views/carrinho/Carrinho";
 import { CarrinhoContext } from '../contexts/carrinhoProvider/context';
+import { mockCarrinho } from '../dadosMock/dadosMock';
 
-const mockCarrinho = {
-    carrinho: [{
-        title: 'testMasculino',
-        image: undefined,
-        quantidade: '1',
-        price: 1.5,
-        description: 'testandoMasculino',
-        id: '1',
-        category: "men's clothing"
-    }],
+const mockCarrinhoContext = {
+    carrinho: [{...mockCarrinho[0],
+    quantidade:'1'}],
     dispatch: jest.fn()
 };
 
@@ -30,9 +24,9 @@ describe("<Carrinho />", () => {
     it('renders correctly', () => {
         const Stack = createNativeStackNavigator<RootStackParamList>();
         const useContextSpy = jest.spyOn(React, 'useContext');
-        useContextSpy.mockReturnValue(mockCarrinho);
+        useContextSpy.mockReturnValue(mockCarrinhoContext);
         const tree = renderer
-          .create( <CarrinhoContext.Provider value={mockCarrinho}>
+          .create( <CarrinhoContext.Provider value={mockCarrinhoContext}>
             <NavigationContainer>
               <Stack.Navigator>
                 <Stack.Screen name="Produto" component={Produto} />
@@ -50,10 +44,10 @@ describe("<Carrinho />", () => {
        
 
         const useContextSpy = jest.spyOn(React, 'useContext');
-        useContextSpy.mockReturnValue(mockCarrinho);
+        useContextSpy.mockReturnValue(mockCarrinhoContext);
 
         render(
-            <CarrinhoContext.Provider value={mockCarrinho}>
+            <CarrinhoContext.Provider value={mockCarrinhoContext}>
                 <NavigationContainer>
                     <Stack.Navigator>
                         <Stack.Screen name="Carrinho" component={Carrinho} />

@@ -10,25 +10,12 @@ import Produto from "../views/produto/Produto";
 import Carrinho from "../views/carrinho/Carrinho";
 import { CarrinhoProvider } from "../contexts";
 import { CarrinhoContext } from "../contexts/carrinhoProvider/context";
+import { mockCarrinho } from "../dadosMock/dadosMock";
 
-const mockCarrinho = {
-  title: 'testMasculino',
-  image: './img/test',
-  price: 1.5,
-  description: 'testandoMasculino',
-  id: '1',
-  category: "men's clothing"
-};
+
 const mockUseContext = {
   carrinho: [
-    {
-      title: 'testMasculino',
-      image: './img/test',
-      price: 1.5,
-      description: 'testandoMasculino',
-      id: '1',
-      category: "men's clothing"
-    }
+  mockCarrinho[0]
   ],
   dispatch: jest.fn()
 }
@@ -36,7 +23,7 @@ const mockUseContext = {
 jest.mock('@react-navigation/native', () => ({
   ...jest.requireActual('@react-navigation/native'),
   useRoute: () => ({
-    params: mockCarrinho,
+    params: mockCarrinho[0],
   }),
 }));
 
@@ -81,12 +68,12 @@ describe("<Produto />", () => {
 
     //testando a aparição do produto
     const imgProduto = screen.getByTestId('imageProduto');
-    const titleProduto = screen.getByText(`${mockCarrinho.title}`)
-    const descriptionProduto = screen.getByText(`${mockCarrinho.description}`);
+    const titleProduto = screen.getByText(`${mockCarrinho[0].title}`)
+    const descriptionProduto = screen.getByText(`${mockCarrinho[0].description}`);
     expect(imgProduto).toBeTruthy();
     expect(titleProduto).toBeTruthy();
     expect(descriptionProduto).toBeTruthy();
-    expect(imgProduto.props.source.uri).toEqual(`${mockCarrinho.image}`);
+    expect(imgProduto.props.source.uri).toEqual(`${mockCarrinho[0].image}`);
 
 
 
@@ -137,7 +124,7 @@ describe("<Produto />", () => {
     
 
 
-    const textPrice = screen.getByText(`R$ ${mockCarrinho.price}`);
+    const textPrice = screen.getByText(`R$ ${mockCarrinho[0].price}`);
 
     expect(textPrice).toBeTruthy();
 
