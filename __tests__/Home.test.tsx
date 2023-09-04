@@ -3,7 +3,7 @@ import { render, screen, fireEvent, waitFor } from "@testing-library/react-nativ
 import "@testing-library/jest-dom";
 import renderer from 'react-test-renderer';
 import App from "../App";
-import  useFetch  from "../hooks/useFetch";
+import useFetch from "../hooks/useFetch";
 import { mockCarrinho } from '../dadosMock/dadosMock';
 
 
@@ -19,10 +19,10 @@ describe("<App />", () => {
             error: false,
         });
         const tree = renderer
-          .create(<App></App>)
-          .toJSON();
+            .create(<App></App>)
+            .toJSON();
         expect(tree).toMatchSnapshot();
-      });
+    });
     it("Should render the App component and display loading indicator.", async () => {
         (useFetch as jest.Mock).mockReturnValue({
             data: mockCarrinho,
@@ -35,7 +35,7 @@ describe("<App />", () => {
         );
         const loading = screen.getByTestId('loading')
         expect(loading).toBeTruthy()
-        
+
 
     });
     it("Should render msg error.", async () => {
@@ -90,21 +90,21 @@ describe("<App />", () => {
         expect(icontButton).toBeTruthy();
 
 
-         //imagem principal 
-         const imagePrincipal = screen.getByTestId("imagePrincipal")
-         expect(imagePrincipal).toBeTruthy()
- 
+        //imagem principal 
+        const imagePrincipal = screen.getByTestId("imagePrincipal")
+        expect(imagePrincipal).toBeTruthy()
+
         // textos que mostram as categorias
-         const textCategoriaMasculina = screen.getByText("Moda Masculina");
-         const textCategoriaFeminina = screen.getByText("Moda Feminina");
-         const textCategoriaEletronico = screen.getByText("Eletronicos");
-         const textCategoriaJoia = screen.getByText("Joias");
- 
- 
-         expect(textCategoriaMasculina).toBeTruthy();
-         expect(textCategoriaFeminina).toBeTruthy();
-         expect(textCategoriaEletronico).toBeTruthy();
-         expect(textCategoriaJoia).toBeTruthy();
+        const textCategoriaMasculina = screen.getByText("Moda Masculina");
+        const textCategoriaFeminina = screen.getByText("Moda Feminina");
+        const textCategoriaEletronico = screen.getByText("Eletronicos");
+        const textCategoriaJoia = screen.getByText("Joias");
+
+
+        expect(textCategoriaMasculina).toBeTruthy();
+        expect(textCategoriaFeminina).toBeTruthy();
+        expect(textCategoriaEletronico).toBeTruthy();
+        expect(textCategoriaJoia).toBeTruthy();
 
 
 
@@ -116,7 +116,7 @@ describe("<App />", () => {
             error: false,
         });
 
-    render(
+        render(
             <App />
         );
         //testando
@@ -130,7 +130,7 @@ describe("<App />", () => {
             //vai para pagina do produto
             const buttonProduto = screen.getByTestId(`imageProdutoButton1`);
             fireEvent.press(buttonProduto);
-         
+
             //adiciona a quantidade
             const buttonIncrement = screen.getByTestId(`increment`);
             fireEvent.press(buttonIncrement);
@@ -142,7 +142,7 @@ describe("<App />", () => {
             //deleta um item da lista de produto
             const buttonRetirar = screen.getByTestId(`retirarCarrinho`);
             fireEvent.press(buttonRetirar);
-            
+
             //volta para pagina de home
             const buttonVoltarHome = screen.getByTestId("voltarHomeButton");
             expect(buttonVoltarHome).toBeTruthy();
@@ -156,5 +156,5 @@ describe("<App />", () => {
     });
     afterEach(() => {
         jest.restoreAllMocks();
-      });
+    });
 });
