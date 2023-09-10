@@ -127,6 +127,7 @@ describe("<App />", () => {
                 expect(screen.getByText(`R$ ${item.price}`)).toBeTruthy();
                 expect(imageProduto.props.source.uri).toEqual(item.image);
             });
+        });
             //vai para pagina do produto
             const buttonProduto = screen.getByTestId(`imageProdutoButton1`);
             fireEvent.press(buttonProduto);
@@ -151,7 +152,7 @@ describe("<App />", () => {
             //testa pra ver se ta na página home
             const titleText = screen.getByText("Mundo das vendas");
             expect(titleText).toBeTruthy();
-        });
+      
 
     });
     afterEach(() => {
