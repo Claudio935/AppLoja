@@ -8,19 +8,22 @@ import {
   StyleSheet
 } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
-import { PropsCarrinho } from '../../types/interfaces';
-import { StackNavigation } from '../../App';
+import { type PropsCarrinho } from '../../types/interfaces';
+import { type StackNavigation } from '../../App';
+
+type dadosCarrinho = {
+  dados: PropsCarrinho[]
+}
 
 
-
-const SectionProduto = ({ dados }: { dados: PropsCarrinho[] }) => {
+const SectionProduto: React.FC<dadosCarrinho> = ({ dados }: dadosCarrinho) => {
   const navigation = useNavigation<StackNavigation>();
   return (
     <ScrollView horizontal={true} showsHorizontalScrollIndicator={false}>
       {dados.map((item) => {
         return (
 
-          <TouchableOpacity style={styles.containerCard} onPress={() => navigation.navigate('Produto', item)} key={item.id} testID={`imageProdutoButton${item.id}`} >
+          <TouchableOpacity style={styles.containerCard} onPress={() => { navigation.navigate('Produto', item); }} key={item.id} testID={`imageProdutoButton${item.id}`} >
             <Image source={{
               uri: item.image,
             }} style={styles.produtoImage} testID={`imageProdudo${item.id}`}></Image>

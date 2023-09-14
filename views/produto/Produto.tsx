@@ -15,8 +15,6 @@ import { PropsCarrinho, RootStackParamList } from '../../types/interfaces';
 import { StackNavigation } from '../../App';
 
 
-
-
 type ProfileScreenRouteProp = RouteProp<RootStackParamList, 'Produto'>;
 
 function Produto(): JSX.Element {
@@ -24,7 +22,7 @@ function Produto(): JSX.Element {
   const { params } = useRoute<ProfileScreenRouteProp>();
 
   const navigation = useNavigation<StackNavigation>();
-  const { carrinho, dispatch } = useContext(CarrinhoContext);
+  const { state: { carrinho }, dispatch } = useContext(CarrinhoContext);
 
   const [quantidadeProduto, setQuantidadeProduto] = useState(0);
   const [objectCarrinho, setObjectCarrinho] = useState<PropsCarrinho>({
@@ -32,17 +30,21 @@ function Produto(): JSX.Element {
     image: "",
     quantidade: `${quantidadeProduto}`,
     price: 0,
-    id: ''
+    id: '',
+    description: '',
+    category: '',
   });
 
   useEffect(() => {
-    if (!!params) {
+    if (params) {
       setObjectCarrinho({
         title: params.title,
         image: params.image,
         quantidade: `${quantidadeProduto}`,
         price: typeof params.price === 'number' ? params.price * quantidadeProduto : 0,
-        id: params.id
+        id: params.id,
+        description: params.description,
+        category: params.description
       })
     }
 
@@ -79,18 +81,19 @@ function Produto(): JSX.Element {
       );
       return
     }
-    if (!!dispatch) {
-      addProduto(dispatch, {
-        title: item.title,
-        image: item.image,
-        quantidade: `${quantidadeProduto}`,
-        price: item.price,
-        id: item.id,
-      })
-    }
+
+    addProduto(dispatch, {
+      title: item.title,
+      image: item.image,
+      quantidade: `${quantidadeProduto}`,
+      price: item.price,
+      id: item.id,
+      description: item.description,
+      category: item.category
+    })
+
     navigation.navigate('Carrinho')
   };
-
 
 
   return (
@@ -102,11 +105,11 @@ function Produto(): JSX.Element {
           <Text style={styles.description}>{params?.description}</Text>
           <Text style={styles.price}>{`R$ ${!params?.price ? 0 : params.price * quantidadeProduto}`}</Text>
           <View style={styles.buttonContainer}>
-            <Button title='<' onPress={() => setQuantidadeProduto((value) => value === 0 ? value : value - 1)} testID='decrement'></Button>
+            <Button title='<' onPress={() => { setQuantidadeProduto((value) => value === 0 ? value : value - 1); }} testID='decrement'></Button>
             <Text style={styles.textButton} testID='textQuantidade'>{quantidadeProduto}</Text>
-            <Button title='>' onPress={() => setQuantidadeProduto((value) => value + 1)} testID='increment'></Button>
+            <Button title='>' onPress={() => { setQuantidadeProduto((value) => value + 1); }} testID='increment'></Button>
           </View>
-          <Button title='Adicionar ao Carrinho' onPress={() => handleAddCarrinho(objectCarrinho)} testID='carrinhoButton'></Button>
+          <Button title='Adicionar ao Carrinho' onPress={() => { handleAddCarrinho(objectCarrinho); }} testID='carrinhoButton'></Button>
         </View>
       </View>
     </ScrollView>

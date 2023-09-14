@@ -13,8 +13,6 @@ import { ProdutosType } from '../../types/interfaces';
 import SectionProduto from './Section';
 
 
-
-
 function Home(): JSX.Element {
 
   const [produtos, setProdutos] = useState<ProdutosType>({
@@ -24,7 +22,7 @@ function Home(): JSX.Element {
     eletronicos: [],
   });
 
-  const { data, loading, error } = useFetch('https://fakestoreapi.com/products');
+  const { data, loading, error } = useFetch(process.env.REACT_APP_URL);
 
   useEffect(() => {
 
@@ -33,14 +31,12 @@ function Home(): JSX.Element {
     const joias = data.filter((item) => item.category === "jewelery",)
     const eletronicos = data.filter((item) => item.category === "electronics")
     setProdutos({
-      roupaHomem: roupaHomem,
-      roupaMulher: roupaMulher,
-      joias: joias,
-      eletronicos: eletronicos,
+      roupaHomem,
+      roupaMulher,
+      joias,
+      eletronicos,
     })
   }, [data]);
-
-
 
 
   if (loading) {
@@ -82,7 +78,6 @@ function Home(): JSX.Element {
     </>
   );
 };
-
 
 
 const styles = StyleSheet.create({

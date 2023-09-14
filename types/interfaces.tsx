@@ -1,14 +1,15 @@
-
 export type PropsCarrinho = {
 
-  title?: string;
-  image?: string;
-  quantidade?: string;
-  price?: number;
-  description?: string;
-  id?: string;
-  category?: string;
+  title: string;
+  image: string;
+  quantidade: string;
+  price: number;
+  description: string;
+  id: string;
+  category: string;
 }
+
+
 export type Payload = PropsCarrinho;
 
 
@@ -18,10 +19,13 @@ export type Action = {
 }
 
 
-
 export type PropsCarrinhoState = {
   carrinho: PropsCarrinho[]
-  dispatch?: React.Dispatch<Action>
+
+}
+export type PropsCarrinhoReducer = {
+  carrinho: PropsCarrinho[]
+  dispatch: React.Dispatch<Action>
 }
 
 
@@ -32,8 +36,9 @@ export type ProdutosType = {
   eletronicos: PropsCarrinho[];
 }
 
+
 export type RootStackParamList = {
   Home: undefined;
-  Produto: { title?: string, image?: string, price?: number, category?: string, description?: string, id?: string, } | undefined;
+  Produto: PropsCarrinho | undefined;
   Carrinho: undefined;
-};
+}

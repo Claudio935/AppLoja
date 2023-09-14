@@ -9,8 +9,8 @@ interface Props {
 };
 
 
-export const CarrinhoProvider = ({ children }: Props) => {
+export const CarrinhoProvider: React.FC<Props> = ({ children }: Props) => {
   const [carrinho, setState] = useReducer(reducer, defaultValue)
 
-  return <CarrinhoContext.Provider value={{ carrinho: [...carrinho.carrinho], dispatch: setState }}>{children}</CarrinhoContext.Provider>
+  return <CarrinhoContext.Provider value={{ state: { carrinho: [...carrinho.carrinho] }, dispatch: setState }}>{children}</CarrinhoContext.Provider>
 }

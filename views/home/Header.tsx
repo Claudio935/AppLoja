@@ -10,11 +10,11 @@ import {
 import { StackNavigation } from '../../App';
 
 
-
 function Header(): JSX.Element {
 
   const navigation = useNavigation<StackNavigation>();
 
+  // eslint-disable-next-line @typescript-eslint/no-var-requires
   const icone = require("../../assets/icones/carrinhoIcone.png");
   return (
     <View style={styles.HeaderContainer}>
@@ -22,7 +22,7 @@ function Header(): JSX.Element {
         <Text style={styles.TitleLoja}>Mundo das vendas</Text>
         <Text style={styles.SubtitleLoja}>Seu Aplicativo de vendas!</Text>
       </View>
-      <TouchableOpacity onPress={() => navigation.navigate('Carrinho')} style={styles.carrinhoIcon} testID='iconTouch'>
+      <TouchableOpacity onPress={() => { navigation.navigate('Carrinho'); }} style={styles.carrinhoIcon} testID='iconTouch'>
         <Image source={icone} style={styles.imageIcon} testID='headerIconImage'></Image>
       </TouchableOpacity>
     </View>

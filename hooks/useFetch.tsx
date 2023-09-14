@@ -2,11 +2,10 @@ import { useEffect, useState, useRef } from "react";
 import { PropsCarrinho } from "../types/interfaces";
 
 
-
 type Fetch = {
   data: PropsCarrinho[],
-  loading: Boolean,
-  error: Boolean
+  loading: boolean,
+  error: boolean
 }
 
 const useFetch = (url: string): Fetch => {
@@ -27,7 +26,6 @@ const useFetch = (url: string): Fetch => {
     if (url.length === 0) {
       return;
     }
-
 
 
     const fetchData = async () => {

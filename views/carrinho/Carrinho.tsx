@@ -11,19 +11,19 @@ import {
   Alert
 } from 'react-native';
 import { CarrinhoContext } from '../../contexts/carrinhoProvider/context';
-import { StackNavigation } from '../../App';
-import { PropsCarrinho } from '../../types/interfaces';
+import { type StackNavigation } from '../../App';
+import { type PropsCarrinho } from '../../types/interfaces';
 import { deteleProduto } from '../../contexts/carrinhoProvider/actions';
 
 
 function Carrinho(): JSX.Element {
 
-  const { carrinho, dispatch } = useContext(CarrinhoContext);
+  const { state: { carrinho }, dispatch } = useContext(CarrinhoContext);
 
   const navigation = useNavigation<StackNavigation>();
 
-  const handleDelete = (objectProduto: PropsCarrinho) => {
-    if (!objectProduto.id) {
+  const handleDelete = (objectProduto: PropsCarrinho): void => {
+    if (typeof objectProduto?.id === "string" && objectProduto?.id.length > 0) {
       Alert.alert(
         "Alerta",
         "Não existe id para esse produto",
@@ -35,11 +35,13 @@ function Carrinho(): JSX.Element {
 
         ]
       );
-      return
+
     };
-    if (!!dispatch) {
-      deteleProduto(dispatch, objectProduto)
-    };
+
+
+    deteleProduto(dispatch, objectProduto)
+
+
   };
 
   return (
@@ -47,7 +49,7 @@ function Carrinho(): JSX.Element {
       <View style={styles.container}>
         <View style={styles.containerHeader}>
           <Text style={styles.titleCarrinho}>Itens do carrinho</Text>
-          <Button testID="voltarHomeButton" title='Adicionar novos itens' color={'#1acd20'} onPress={() => navigation.navigate('Home')}></Button>
+          <Button testID="voltarHomeButton" title='Adicionar novos itens' color={'#1acd20'} onPress={() => { navigation.navigate('Home'); }}></Button>
         </View>
         {carrinho.map((item, index) => {
           return (
@@ -59,7 +61,7 @@ function Carrinho(): JSX.Element {
                   <Text style={styles.quantidade}>Quantidade: {item.quantidade}</Text>
                   <Text style={styles.price}> R$ {item.price}</Text>
                 </View>
-                <TouchableOpacity testID={"retirarCarrinho"} style={styles.button} onPress={() => handleDelete(item)}>
+                <TouchableOpacity testID={"retirarCarrinho"} style={styles.button} onPress={() => { handleDelete(item); }}>
                   <Text style={styles.textButton}>Retirar do Carrinho</Text>
                 </TouchableOpacity>
               </View>
