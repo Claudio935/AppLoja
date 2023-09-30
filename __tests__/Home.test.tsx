@@ -1,161 +1,193 @@
 import React from 'react'
-import { render, screen, fireEvent, waitFor } from "@testing-library/react-native";
+import { render, screen, fireEvent, waitFor, act, cleanup } from "@testing-library/react-native";
 import "@testing-library/jest-dom";
 import renderer from 'react-test-renderer';
+import AsyncStorage from "@react-native-async-storage/async-storage";
 import App from "../App";
-import useFetch from "../hooks/useFetch";
-import { mockCarrinho } from '../dadosMock/dadosMock';
+import useFetch from "../src/hooks/useFetch";
+import { mockCart } from '../src/data/dadosMock/dadosMock';
+import { transformMoney } from '../src/utils/transformFunctions';
 
-
-
-
-jest.mock("../hooks/useFetch");
+jest.mock("../src/hooks/useFetch");
 
 describe("<App />", () => {
-    it('renders correctly', () => {
-        (useFetch as jest.Mock).mockReturnValue({
-            data: mockCarrinho,
-            loading: true,
-            error: false,
-        });
-        const tree = renderer
-            .create(<App></App>)
-            .toJSON();
-        expect(tree).toMatchSnapshot();
+  it('renders correctly', async () => {
+    (useFetch as jest.Mock).mockReturnValue({
+      data: mockCart.cart,
+      loading: true,
+      error: false,
     });
-    it("Should render the App component and display loading indicator.", async () => {
-        (useFetch as jest.Mock).mockReturnValue({
-            data: mockCarrinho,
-            loading: true,
-            error: false,
-        });
+    await act(() => {
+      const tree = renderer
+        .create(<App></App>)
+        .toJSON();
+      expect(tree).toMatchSnapshot();
+    })
 
-        render(
-            <App />
-        );
-        const loading = screen.getByTestId('loading')
-        expect(loading).toBeTruthy()
-
-
+  });
+  it("Should render the App component, go to the cart page and show itens saves in the AsyncStorage", async () => {
+    await AsyncStorage.setItem('store', JSON.stringify(mockCart.cart));
+    (useFetch as jest.Mock).mockReturnValue({
+      data: mockCart.cart,
+      loading: false,
+      error: false,
     });
-    it("Should render msg error.", async () => {
-        (useFetch as jest.Mock).mockReturnValue({
-            data: mockCarrinho,
-            loading: false,
-            error: true,
-        });
 
-        render(
-            <App />
-        );
-        const msgError = screen.getByText('Erro no banco de dados...')
-        expect(msgError).toBeTruthy()
+    render(
+      <App />
+    );
 
+    const iconHeaderButton = await screen.findByTestId("iconTouch")
+    fireEvent.press(iconHeaderButton);
+    const incrementTouch = await screen.findByTestId(`incrementTouch${mockCart.cart[0].id}`)
+    expect(incrementTouch).toBeTruthy()
+    await AsyncStorage.removeItem('store')
 
+  });
+  it("Should render the App component and display loading indicator.", async () => {
+    (useFetch as jest.Mock).mockReturnValue({
+      data: mockCart.cart,
+      loading: true,
+      error: false,
     });
-    it("Should render the App and show components.", async () => {
-        (useFetch as jest.Mock).mockReturnValue({
-            data: mockCarrinho,
-            loading: false,
-            error: false,
-        });
-
-        render(
-            <App />
-        );
-        //testando aparição dos produtos na tela
-        await waitFor(() => {
-            mockCarrinho.forEach(item => {
-                const imageProduto = screen.getByTestId(`imageProdudo${item.id}`)
-                expect(screen.getByText(item.title)).toBeTruthy();
-                expect(screen.getByText(`R$ ${item.price}`)).toBeTruthy();
-                expect(imageProduto.props.source.uri).toEqual(item.image)
-            });
-        });
 
 
-        //header
-        //existe os textos no header
-        const title = screen.getByText("Mundo das vendas");
-        const subTitle = screen.getByText("Seu Aplicativo de vendas!");
-        expect(title).toBeTruthy()
-        expect(subTitle).toBeTruthy()
+    render(
+      <App />
+    );
+
+    const loading = await screen.findByTestId('loading')
+    expect(loading).toBeTruthy()
 
 
-
-        //icone existência 
-        const imagemComponent = screen.getByTestId('headerIconImage');
-        const icontButton = screen.getByTestId('iconTouch');
-        expect(imagemComponent).toBeTruthy();
-        expect(icontButton).toBeTruthy();
-
-
-        //imagem principal 
-        const imagePrincipal = screen.getByTestId("imagePrincipal")
-        expect(imagePrincipal).toBeTruthy()
-
-        // textos que mostram as categorias
-        const textCategoriaMasculina = screen.getByText("Moda Masculina");
-        const textCategoriaFeminina = screen.getByText("Moda Feminina");
-        const textCategoriaEletronico = screen.getByText("Eletronicos");
-        const textCategoriaJoia = screen.getByText("Joias");
-
-
-        expect(textCategoriaMasculina).toBeTruthy();
-        expect(textCategoriaFeminina).toBeTruthy();
-        expect(textCategoriaEletronico).toBeTruthy();
-        expect(textCategoriaJoia).toBeTruthy();
-
-
-
+  });
+  it("Should render and show msg error.", async () => {
+    (useFetch as jest.Mock).mockReturnValue({
+      data: mockCart.cart,
+      loading: false,
+      error: true,
     });
-    it("renders the main path of the app", async () => {
-        (useFetch as jest.Mock).mockReturnValue({
-            data: mockCarrinho,
-            loading: false,
-            error: false,
-        });
 
-        render(
-            <App />
-        );
-        //testando
-        await waitFor(() => {
-            mockCarrinho.forEach(item => {
-                const imageProduto = screen.getByTestId(`imageProdudo${item.id}`)
-                expect(screen.getByText(item.title)).toBeTruthy();
-                expect(screen.getByText(`R$ ${item.price}`)).toBeTruthy();
-                expect(imageProduto.props.source.uri).toEqual(item.image);
-            });
-        });
-            //vai para pagina do produto
-            const buttonProduto = screen.getByTestId(`imageProdutoButton1`);
-            fireEvent.press(buttonProduto);
 
-            //adiciona a quantidade
-            const buttonIncrement = screen.getByTestId(`increment`);
-            fireEvent.press(buttonIncrement);
+    render(
+      <App />
+    );
 
-            //vai para a página do carrinho e adiciona ao carrinho
-            const buttoncarrinho = screen.getByTestId(`carrinhoButton`);
-            fireEvent.press(buttoncarrinho);
+    const msgError = await screen.findByText('Erro no banco de dados...')
+    expect(msgError).toBeTruthy()
 
-            //deleta um item da lista de produto
-            const buttonRetirar = screen.getByTestId(`retirarCarrinho`);
-            fireEvent.press(buttonRetirar);
 
-            //volta para pagina de home
-            const buttonVoltarHome = screen.getByTestId("voltarHomeButton");
-            expect(buttonVoltarHome).toBeTruthy();
-            fireEvent(buttonVoltarHome, 'press');
-
-            //testa pra ver se ta na página home
-            const titleText = screen.getByText("Mundo das vendas");
-            expect(titleText).toBeTruthy();
-      
-
+  });
+  it("Should render the App and show Home components.", async () => {
+    (useFetch as jest.Mock).mockReturnValue({
+      data: mockCart.cart,
+      loading: false,
+      error: false,
     });
-    afterEach(() => {
-        jest.restoreAllMocks();
+
+
+    render(
+      <App />
+    );
+
+    // testando aparição dos produtos na tela
+    await waitFor(() => {
+      mockCart.cart.forEach(item => {
+        const imageProduto = screen.getByTestId(`imageProdudo${item.id}`)
+        expect(screen.getByText(item.title)).toBeTruthy();
+        expect(screen.getByText(transformMoney(item.price))).toBeTruthy();
+        expect(imageProduto.props.source.uri).toEqual(item.image)
+      });
     });
+
+
+    // header
+    // existe os textos no header
+    const title = await screen.findByText("Mundo das vendas");
+    const subTitle = await screen.findByText("Seu Aplicativo de vendas!");
+    expect(title).toBeTruthy()
+    expect(subTitle).toBeTruthy()
+
+
+    // existência do ícone do carrinho no header
+    const imagemComponent = await screen.findByTestId('headerIconImage');
+    const icontButton = await screen.findByTestId('iconTouch');
+    expect(imagemComponent).toBeTruthy();
+    expect(icontButton).toBeTruthy();
+
+
+    // imagem principal
+    const imagePrincipal = await screen.findByTestId("imagePrincipal")
+    expect(imagePrincipal).toBeTruthy()
+
+    // textos que mostram as categorias
+    const textCategoriaMasculina = await screen.findByText("Moda Masculina");
+    const textCategoriaFeminina = await screen.findByText("Moda Feminina");
+    const textCategoriaEletronico = await screen.findByText("Eletronicos");
+    const textCategoriaJoia = await screen.findByText("Joias");
+
+
+    expect(textCategoriaMasculina).toBeTruthy();
+    expect(textCategoriaFeminina).toBeTruthy();
+    expect(textCategoriaEletronico).toBeTruthy();
+    expect(textCategoriaJoia).toBeTruthy();
+
+
+  });
+  it("renders the main path of the app and test functionalities", async () => {
+    (useFetch as jest.Mock).mockReturnValue({
+      data: mockCart.cart,
+      loading: false,
+      error: false,
+    });
+
+
+    render(
+      <App />
+    );
+
+
+    // vai para pagina do produto
+    const buttonProduto = await screen.findByTestId(`imageProdutoButton1`);
+    fireEvent.press(buttonProduto);
+
+    // adiciona a quantidade
+    const buttonIncrement = await screen.findByTestId(`increment`);
+    fireEvent.press(buttonIncrement);
+    fireEvent.press(buttonIncrement);
+
+    // vai para a página do carrinho
+    const buttoncart = await screen.findByTestId(`carrinhoButton`);
+    fireEvent.press(buttoncart);
+
+    // adiona e remove a quantidade do produto
+    const increment = await screen.findByTestId("incrementTouch0")
+    const decrement = await screen.findByTestId("decrementTouch0")
+    fireEvent.press(increment)
+    fireEvent.press(increment)
+
+    const textQuantifyInitial = await screen.findByText("Quantidade: 4")
+    expect(textQuantifyInitial).toBeTruthy()
+    fireEvent.press(decrement)
+    fireEvent.press(decrement)
+
+    const textQuantifyFinal = await screen.findByText("Quantidade: 2")
+    expect(textQuantifyFinal).toBeTruthy()
+
+
+    // volta para pagina de home
+    const buttonVoltarHome = await screen.findByTestId("voltarHomeButton");
+    expect(buttonVoltarHome).toBeTruthy();
+    fireEvent(buttonVoltarHome, 'press');
+
+    // testa pra ver se ta na página home
+    const titleText = await screen.findByText("Mundo das vendas");
+    expect(titleText).toBeTruthy();
+
+
+  });
+  afterEach(() => {
+    jest.restoreAllMocks();
+    cleanup()
+  });
 });

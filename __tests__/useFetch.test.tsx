@@ -1,9 +1,6 @@
-// useFetch.test.js
-
-import useFetch from '../hooks/useFetch';
+import useFetch from '../src/hooks/useFetch';
 import { renderHook, waitFor } from '@testing-library/react-native';
-import { mockCarrinho } from '../dadosMock/dadosMock';
-
+import { mockCart } from '../src/data/dadosMock/dadosMock';
 
 
 describe("<App />", () => {
@@ -14,9 +11,8 @@ describe("<App />", () => {
   it('fetches data successfully', async () => {
 
     global.fetch = jest.fn().mockResolvedValue({
-      json: async () => mockCarrinho,
+      json: async () => mockCart,
     });
-
 
 
     expect.assertions(5)
@@ -34,18 +30,16 @@ describe("<App />", () => {
 
 
     })
-    expect(result.current.data).toEqual(mockCarrinho)
+    expect(result.current.data).toEqual(mockCart)
     expect(result.current.error).toBe(false)
-
 
 
   });
   it('fetches data error', async () => {
 
     global.fetch = jest.fn().mockRejectedValue({
-      json: async () => mockCarrinho,
+      json: async () => mockCart,
     });
-
 
 
     expect.assertions(5)
@@ -66,12 +60,6 @@ describe("<App />", () => {
     })
     expect(result.current.data).toEqual([])
     expect(result.current.error).toBe(true)
-
-
-
   });
-
-
-
 
 })

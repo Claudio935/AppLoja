@@ -52,6 +52,7 @@ module.exports = {
     "@typescript-eslint/explicit-module-boundary-types": "off",
     "@typescript-eslint/consistent-type-exports": "off",
     "@typescript-eslint/consistent-type-definitions": ["error", "type"],
+    '@typescript-eslint/no-var-requires': "off",
     'no-multiple-empty-lines': [
       'error',
       {
